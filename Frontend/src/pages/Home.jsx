@@ -1,4 +1,6 @@
-import { DisplayFood, ExploreMenu, Header} from "../components";
+
+import { DisplayFood, ExploreMenu, Header } from "../components";
+import DownloadApp from "../components/DownloadApp";
 
 const Home = () => {
   return (
@@ -6,6 +8,7 @@ const Home = () => {
       <Header />
       <ExploreMenu />
       <DisplayFood />
+      <DownloadApp />
     </main>
   );
 };
