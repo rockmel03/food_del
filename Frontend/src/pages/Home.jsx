@@ -1,16 +1,13 @@
-import { ExploreMenu, Header } from '../components'
+import { DisplayFood, ExploreMenu, Header} from "../components";
 
 const Home = () => {
-
-
-
-
   return (
     <main>
-        <Header />
-        <ExploreMenu />
+      <Header />
+      <ExploreMenu />
+      <DisplayFood />
     </main>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
