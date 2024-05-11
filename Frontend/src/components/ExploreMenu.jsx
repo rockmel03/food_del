@@ -17,9 +17,18 @@ const ExploreMenu = () => {
       <div className="py-8 flex items-center justify-between gap-5 overflow-x-auto">
         {categories &&
           categories.map((item, index) => (
-            <Link key={index} to={`?category=${item.menu_name.toLowerCase()}`}>
+            <Link
+              key={index}
+              to={`?category=${
+                !(activeIndex === index) ? item.menu_name.toLowerCase() : "all"
+              }`}
+            >
               <div
-                onClick={() => setActiveIndex(index)}
+                onClick={() =>
+                  !(activeIndex === index)
+                    ? setActiveIndex(index)
+                    : setActiveIndex(null)
+                }
                 className="flex flex-col items-center justify-center gap-4 w-fit"
               >
                 <div
