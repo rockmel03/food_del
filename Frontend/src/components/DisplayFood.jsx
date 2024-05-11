@@ -1,11 +1,15 @@
 import { useLocation } from "react-router-dom";
-import { food_list } from "../assets";
 import ProductCard from "./templets/ProductCard";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { StoreContext } from "../context/StoreContext";
 
 const DisplayFood = () => {
   const [foodList, setFoodList] = useState([]);
+
+  const { food_list } = useContext(StoreContext);
   const { search } = useLocation();
+
+  
 
   useEffect(() => {
     const searchData = search

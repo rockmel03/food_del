@@ -1,11 +1,14 @@
+import { useContext } from "react";
 import { assets } from "../assets/index";
+import { StoreContext } from "../context/StoreContext";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const isLoggedIn = false;
-  const cartItems = [];
+  const { cartItems } = useContext(StoreContext);
 
   return (
-    <nav className="w-full h-[80px] flex items-center justify-between gap-2 py-2 border-b">
+    <nav className="w-full h-[100px] flex items-center justify-between gap-2 py-2 ">
       <a href="/" className="block w-[152px]">
         <img
           src={assets.logo}
@@ -37,19 +40,19 @@ const Navbar = () => {
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-[22px] h-[22px] relative">
+        <Link to="/cart" className="w-[22px] h-[22px] relative">
           <img
             src={assets.basket_icon}
             alt="basket_icon"
             className="w-full h-full object-contain"
           />
-          {cartItems.length > 0 && (
+          {Object.keys(cartItems).length > 0 && (
             <>
               <div className="w-[8px] h-[8px] bg-red-500 rounded-full absolute -top-[8px] -right-[8px]" />
               <div className="w-[8px] h-[8px] bg-red-500 rounded-full absolute -top-[8px] -right-[8px] animate-ping" />
             </>
           )}
-        </div>
+        </Link>
         {isLoggedIn ? (
           <div className="w-[22px] h-[22px]">
             <img
