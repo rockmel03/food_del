@@ -3,16 +3,11 @@ import { StoreContext } from "../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 
 const CartTotal = () => {
-  const { food_list, cartItems } = useContext(StoreContext);
-
-  const navigate = useNavigate()
+  const { getTotalCartAmount } = useContext(StoreContext);
+  const navigate = useNavigate();
 
   let deliveryFee = 2;
-  let subtotal = Object.keys(cartItems)
-    .map(
-      (key) => food_list.find((item) => item._id == key).price * cartItems[key]
-    )
-    .reduce((acc, curr) => acc + curr, 0);
+  let subtotal = getTotalCartAmount();
 
   return (
     <section className="my-10 flex flex-col sm:flex-row-reverse items-start justify-around gap-5">
@@ -37,17 +32,20 @@ const CartTotal = () => {
       <div className="capitalize max-w-[450px] w-full p-3">
         <h2 className="text-3xl mb-4">cart totals</h2>
         <h4 className="text-xl flex items-end justify-between">
-          subtotal <span>{subtotal}</span>
+          subtotal <span>${subtotal}</span>
         </h4>
         <hr className="h-[1px] border-none bg-zinc-500 my-2" />
         <h4 className="text-xl flex items-end justify-between">
-          delivery fee <span>{deliveryFee}</span>
+          delivery fee <span>${subtotal === 0 ? 0 : deliveryFee}</span>
         </h4>
         <hr className="h-[1px] border-none bg-zinc-500 my-2" />
         <h4 className="text-xl flex items-end justify-between">
-          total <span>{subtotal + deliveryFee}</span>
+          total <span>${subtotal === 0 ? 0 : subtotal + deliveryFee}</span>
         </h4>
-        <button onClick={() => navigate('/order')} className="uppercase px-4 py-3 rounded bg-orange-700 hover:bg-orange-800 text-white text-sm font-medium mt-4">
+        <button
+          onClick={() => navigate("/order")}
+          className="uppercase px-4 py-3 rounded bg-orange-700 hover:bg-orange-800 text-white text-sm font-medium mt-4"
+        >
           proceed to checkout
         </button>
       </div>

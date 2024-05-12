@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const isLoggedIn = false;
-  const { cartItems } = useContext(StoreContext);
+  const { getTotalCartAmount } = useContext(StoreContext);
 
   return (
     <nav className="w-full h-[100px] flex items-center justify-between gap-2 py-2 ">
@@ -46,7 +46,7 @@ const Navbar = () => {
             alt="basket_icon"
             className="w-full h-full object-contain"
           />
-          {Object.keys(cartItems).length > 0 && (
+          {getTotalCartAmount() > 0 && (
             <>
               <div className="w-[8px] h-[8px] bg-red-500 rounded-full absolute -top-[8px] -right-[8px]" />
               <div className="w-[8px] h-[8px] bg-red-500 rounded-full absolute -top-[8px] -right-[8px] animate-ping" />

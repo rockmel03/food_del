@@ -1,8 +1,15 @@
+import { useContext } from "react";
 import { InputField } from "../components";
 import { useForm } from "react-hook-form";
+import { StoreContext } from "../context/StoreContext";
 
 const Order = () => {
   const { handleSubmit, register } = useForm();
+  const { getTotalCartAmount } = useContext(StoreContext);
+
+  let deliveryFee = 2;
+  let subtotal = getTotalCartAmount();
+
   const handleFormSubmit = (data) => {
     console.log(data);
   };
@@ -11,7 +18,7 @@ const Order = () => {
     <main>
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
-        className="flex flex-col md:flex-row items-center justify-between gap-5 my-[3vw]"
+        className="flex flex-col sm:flex-row items-center justify-between gap-5 my-[3vw]"
       >
         <div className="flex flex-col gap-2 max-w-[450px]  w-full">
           <h2 className="text-3xl font-medium capitalize mb-5">
@@ -84,15 +91,15 @@ const Order = () => {
         <div className="capitalize max-w-[450px] w-full p-3">
           <h2 className="text-3xl mb-4">cart totals</h2>
           <h4 className="text-xl flex items-end justify-between">
-            subtotal <span>{`subtotal`}</span>
+            subtotal <span>${subtotal}</span>
           </h4>
           <hr className="h-[1px] border-none bg-zinc-500 my-2" />
           <h4 className="text-xl flex items-end justify-between">
-            delivery fee <span>{`deliveryFee`}</span>
+            delivery fee <span>${subtotal === 0 ? 0 : deliveryFee}</span>
           </h4>
           <hr className="h-[1px] border-none bg-zinc-500 my-2" />
           <h4 className="text-xl flex items-end justify-between">
-            total <span>{`subtotal + deliveryFee`}</span>
+            total <span>${subtotal === 0 ? 0 : subtotal + deliveryFee}</span>
           </h4>
           <button
             type="submit"
