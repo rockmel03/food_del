@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { StoreContext } from "../context/StoreContext";
+import { useNavigate } from "react-router-dom";
 
 const CartTotal = () => {
   const { food_list, cartItems } = useContext(StoreContext);
+
+  const navigate = useNavigate()
 
   let deliveryFee = 2;
   let subtotal = Object.keys(cartItems)
@@ -44,7 +47,7 @@ const CartTotal = () => {
         <h4 className="text-xl flex items-end justify-between">
           total <span>{subtotal + deliveryFee}</span>
         </h4>
-        <button className="uppercase px-4 py-3 rounded bg-orange-700 hover:bg-orange-800 text-white text-sm font-medium mt-4">
+        <button onClick={() => navigate('/order')} className="uppercase px-4 py-3 rounded bg-orange-700 hover:bg-orange-800 text-white text-sm font-medium mt-4">
           proceed to checkout
         </button>
       </div>
