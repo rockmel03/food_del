@@ -9,27 +9,27 @@ const Navbar = () => {
 
   return (
     <nav className="w-full h-[100px] flex items-center justify-between gap-2 py-2 ">
-      <a href="/" className="block w-[152px]">
+      <Link to="/" className="block w-[152px]">
         <img
           src={assets.logo}
           alt="logo"
           className="w-full h-full object-contain"
         />
-      </a>
+      </Link>
 
       <div className="hidden md:flex items-center gap-5">
-        <a href="/home" className="text-lg">
+        <Link to="/home" className="text-lg">
           home
-        </a>
-        <a href="/menu" className="text-lg">
+        </Link>
+        <Link to="/menu" className="text-lg">
           menu
-        </a>
-        <a href="/mobile-app" className="text-lg">
+        </Link>
+        <Link to="/mobile-app" className="text-lg">
           mobile-app
-        </a>
-        <a href="/contact" className="text-lg">
+        </Link>
+        <Link to="/contact" className="text-lg">
           contact us
-        </a>
+        </Link>
       </div>
 
       <div className="flex items-center gap-5">
