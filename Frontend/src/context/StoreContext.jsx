@@ -12,6 +12,11 @@ const cartReducer = (state, action) => {
       return { ...state, [action.payload]: state[action.payload] + 1 };
     }
     case "remove-from-cart": {
+      if (state[action.payload] === 1) {
+        const newState = {...state}
+        delete newState[action.payload];
+        return newState
+      }
       return { ...state, [action.payload]: state[action.payload] - 1 };
     }
   }
