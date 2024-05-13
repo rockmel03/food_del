@@ -14,7 +14,7 @@ const Header = () => {
             Order your <br />
             favourite food here
           </h1>
-          <p className="max-w-[680px] text-[1.5vw] leading-[1.2] lg:text-[18px] hidden md:block">
+          <p className="max-w-[680px] text-base leading-[1.2] lg:text-[18px] hidden md:block">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
             rerum pariatur neque nihil voluptatum, cumque, aspernatur facilis
             ipsa eveniet laudantium voluptate ad laborum minus beatae inventore?

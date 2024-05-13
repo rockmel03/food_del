@@ -12,7 +12,7 @@ const InputField = React.forwardRef(function InputField(
         ref={ref}
         id={id}
         type={type || "text"}
-        className={`px-4 py-2 bg-transparent text-inherit rounded border-none ${className} w-full`}
+        className={`px-4 py-2 bg-transparent text-inherit rounded ${className} w-full`}
         {...props}
       />
     </div>

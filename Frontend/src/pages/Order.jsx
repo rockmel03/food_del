@@ -43,14 +43,12 @@ const Order = () => {
             type="email"
             placeholder="email address"
             className="shadow-md bg-zinc-700 placeholder:capitalize"
-            required
           />
           <InputField
             {...register("street", { required: true })}
             type="text"
             placeholder="street"
             className="shadow-md bg-zinc-700 placeholder:capitalize"
-            required
           />
           <div className="flex gap-2">
             <InputField
@@ -85,7 +83,6 @@ const Order = () => {
             type="tel"
             placeholder="phone"
             className="shadow-md bg-zinc-700 placeholder:capitalize"
-            required
           />
         </div>
         <div className="capitalize max-w-[450px] w-full p-3">
