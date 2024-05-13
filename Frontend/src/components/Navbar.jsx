@@ -3,7 +3,7 @@ import { assets } from "../assets/index";
 import { StoreContext } from "../context/StoreContext";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ setShowLogin }) => {
   const isLoggedIn = false;
   const { getTotalCartAmount } = useContext(StoreContext);
 
@@ -62,7 +62,10 @@ const Navbar = () => {
             />
           </div>
         ) : (
-          <button className="px-4 py-1 capitalize rounded-full border-[2px]">
+          <button
+            onClick={() => setShowLogin(true)}
+            className="px-4 py-1 capitalize rounded-full border-[2px]"
+          >
             sign in
           </button>
         )}

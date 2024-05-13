@@ -6,8 +6,9 @@ import DisplayFood from './DisplayFood'
 import CartTotal from "./CartTotal";
 import DisplayCartItems from "./DisplayCartItems";
 import InputField from "./templets/InputField";
+import LogInPopup from "./LogInPopup";
 
 
 
 
-export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField };
+export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField, LogInPopup };

@@ -1,11 +1,14 @@
 import { Route, Routes } from "react-router-dom";
-import { Navbar } from "./components/index";
+import { LogInPopup, Navbar } from "./components/index";
 import { Cart, Home, Order } from "./pages";
+import { useState } from "react";
 
 const App = () => {
+  const [showLogin, setShowLogin] = useState(false);
   return (
     <main className="min-h-screen px-[3vw] lg:max-w-screen-xl mx-auto">
-      <Navbar />
+      {showLogin && <LogInPopup setShowLogin={setShowLogin} />}
+      <Navbar setShowLogin={setShowLogin} />
 
       {/* Routes */}
       <Routes>
