@@ -7,8 +7,9 @@ import CartTotal from "./CartTotal";
 import DisplayCartItems from "./DisplayCartItems";
 import InputField from "./templets/InputField";
 import LogInPopup from "./LogInPopup";
+import Footer from "./Footer";
 
 
 
 
-export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField, LogInPopup };
+export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField, LogInPopup, Footer };
