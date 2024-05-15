@@ -6,7 +6,7 @@ const foodSchema = new mongoose.Schema({
     price: { type: Number, default: 0 },
     description: { type: String, required: true },
     category: { type: String, required: true }
-})
+}, { timestamps: true })
 
 
 export default mongoose.model('Food', foodSchema)
