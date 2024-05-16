@@ -4,7 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-
+//get all food list
 const getList = asyncHandler(async (req, res) => {
 
     const foodList = await Food.find({})
@@ -15,7 +15,7 @@ const getList = asyncHandler(async (req, res) => {
 
 })
 
-
+//add food item
 const addFood = asyncHandler(async (req, res) => {
     const { name, price, description, category } = req.body
 
@@ -48,5 +48,24 @@ const addFood = asyncHandler(async (req, res) => {
 
 })
 
+//delete food item 
+const deleteFood = asyncHandler(async (req, res) => {
 
-export { getList, addFood }
+    const { _id } = req.body
+    if (!_id) throw new ApiError(400, '_id required')
+
+    const foodItem = await Food.findById(_id)
+    if (!foodItem) throw new ApiError(500, "item not found or already deleted")
+
+    fs.unlink(`public/uploads/${foodItem.image}`, (err) => {
+        if (err) throw err;
+        console.log(`public/uploads/${foodItem.image} deleted successfully`);
+    })
+
+    const deletedFood = await Food.findByIdAndDelete(_id)
+    return res.status(200)
+        .json(new ApiResponse(200, deletedFood, "food item deleted successfully"))
+
+})
+
+export { getList, addFood, deleteFood }
