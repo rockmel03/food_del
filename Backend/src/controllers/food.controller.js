@@ -5,10 +5,14 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 
-const getList = asyncHandler((req, res) => {
-    console.log('working')
+const getList = asyncHandler(async (req, res) => {
 
-    res.send('working')
+    const foodList = await Food.find({})
+    if (!foodList) throw new ApiError(500, "items not found ")
+
+    return res.status(200)
+        .json(new ApiResponse(200, foodList, "data fetched successfully"))
+
 })
 
 
