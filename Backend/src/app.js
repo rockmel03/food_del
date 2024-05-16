@@ -12,6 +12,7 @@ import foodRouter from "./routes/food.route.js";
 
 //routes
 app.use('/api/v1/food', foodRouter)
+app.use('/images', express.static('public/uploads'))
 
 
 export default app
