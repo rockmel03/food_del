@@ -8,8 +8,8 @@ foodRouter.route('/list').get(getList)
 
 foodRouter.route('/add').post(upload.single("image"), addFood)
 
-foodRouter.route('/delete').delete(deleteFood)
-
-foodRouter.route('/update/:id').patch(upload.single("image"), updateFood)
+foodRouter.route('/:id')
+    .delete(deleteFood)
+    .patch(upload.single("image"), updateFood)
 
 export default foodRouter
