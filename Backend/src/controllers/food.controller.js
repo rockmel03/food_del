@@ -37,7 +37,7 @@ const addFood = asyncHandler(async (req, res) => {
     if (!createdFood) {
         fs.unlink(`public/uploads/${imageFilename}`, (err) => {
             if (err) throw err;
-            console.log('path/file.txt was deleted');
+            console.log(`public/uploads/${imageFilename} was deleted`);
         })
         throw new ApiError(500, "something went wrong while creating food item")
     }
@@ -68,4 +68,45 @@ const deleteFood = asyncHandler(async (req, res) => {
 
 })
 
-export { getList, addFood, deleteFood }
+//update food item
+const updateFood = asyncHandler(async (req, res) => {
+
+    const { id } = req.params
+    const { name, price, description, category } = req.body
+
+    if (
+        [name, price, description, category].some(val => val.trim() === "")
+    ) throw new ApiError(400, 'all fields are required')
+
+    const isExists = await Food.findOne({ _id: id })
+    if (!isExists) throw new ApiError(400, 'item does not exists')
+
+    let imageFilename = isExists.image
+
+    if (req.file?.filename) {
+        fs.unlink(`public/uploads/${isExists.image}`, (err) => {
+            if (err) throw err;
+            console.log(`public/uploads/${isExists.image} was deleted`)
+        })
+
+        imageFilename = req.file?.filename
+    }
+
+    const foodItem = await Food.findByIdAndUpdate(
+        id,
+        {
+            name,
+            price,
+            description,
+            category,
+            image: imageFilename
+        },
+        { new: true }
+    )
+
+    return res.status(200)
+        .json(new ApiResponse(200, foodItem, "item updated successfully"))
+
+})
+
+export { getList, addFood, deleteFood, updateFood }
