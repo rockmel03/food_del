@@ -109,4 +109,17 @@ const updateFood = asyncHandler(async (req, res) => {
 
 })
 
-export { getList, addFood, deleteFood, updateFood }
+//get food item
+const getFoodItem = asyncHandler(async (req, res) => {
+
+    const { id } = req.params
+    if (!id) throw new ApiError(400, 'id required')
+
+    const foodItem = await Food.findById(id)
+    if (!foodItem) throw new ApiError(400, 'item does not exists')
+
+    return res.status(200)
+        .json(new ApiResponse(200, foodItem, 'item fetched successfully'))
+})
+
+export { getList, addFood, deleteFood, updateFood, getFoodItem }
