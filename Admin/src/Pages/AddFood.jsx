@@ -2,18 +2,35 @@ import React from "react";
 import { assets } from "../assets";
 import { InputField } from "../components";
 import { useForm } from "react-hook-form";
+import Axios from "../utils/axios";
 
 export const AddFood = () => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
 
   const [image, setImage] = React.useState(null);
 
-  const onFormSubmit = (data) => {
-    console.log(data);
+  const onFormSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('image', image)
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("category", data.category);
+    formData.append("price", data.price);
+
+    try {
+      const response = await Axios.post("/api/v1/food/add", formData);
+
+      if (response.data.status) {
+        alert(response.data.message);
+        reset();
+      }
+    } catch (error) {
+      alert(error.message)
+    }
   };
 
   return (
-    <main className="w-full flex items-center justify-center p-5 ">
+    <main className="w-full flex items-center p-5 ">
       <form
         onSubmit={handleSubmit(onFormSubmit)}
         className="flex flex-col gap-2 w-full max-w-[760px]"
@@ -57,13 +74,12 @@ export const AddFood = () => {
             name="description"
             id="description"
             placeholder="Write content here"
-            cols={30}
             rows={6}
             required
           ></textarea>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex flex-col w-full">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex flex-col">
             <label htmlFor="category" className="opacity-80">
               Product category
             </label>
@@ -78,11 +94,11 @@ export const AddFood = () => {
               <option value="salad">salad2</option>
             </select>
           </div>
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col">
             <InputField
               {...register("price", { required: true })}
               label="Product Price"
-              className="border-2"
+              className="border-2 max-w-[120px]"
               type="number"
               name="price"
               placeholder="$12"
@@ -90,7 +106,7 @@ export const AddFood = () => {
             />
           </div>
         </div>
-        <button className="bg-zinc-500 text-white px-4 py-2 rounded">
+        <button className="bg-zinc-500 text-white px-4 py-3 rounded max-w-[120px]">
           Add Item
         </button>
       </form>
