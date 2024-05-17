@@ -1,12 +1,19 @@
 import React from "react";
 import { Navbar, Sidebar } from "./components";
+import { Route, Routes } from "react-router-dom";
+import { AddFood } from "./Pages";
 
 const App = () => {
   return (
     <div>
       <Navbar />
       <hr />
-      <Sidebar />
+      <div className="flex ">
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<AddFood />} />
+        </Routes>
+      </div>
     </div>
   );
 };
