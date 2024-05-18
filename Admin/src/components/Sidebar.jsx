@@ -1,12 +1,5 @@
-import React from "react";
-import { assets } from "../assets";
-import { NavLink, useNavigate } from "react-router-dom";
-
-const SideNav_links = [
-  { link: "/", title: "Add Item", image: assets.add_icon },
-  { link: "/list", title: "List Items", image: assets.order_icon },
-  { link: "/orders", title: "Orders", image: assets.order_icon },
-];
+import { NavLink } from "react-router-dom";
+import { SideNav_links } from "../constants";
 
 const Sidebar = () => {
   return (
@@ -23,7 +16,9 @@ const Sidebar = () => {
             }
           >
             <img src={item.image} alt="add_icon" className="min-w-[22px]" />
-            <span className="hidden sm:inline whitespace-nowrap">{item.title}</span>
+            <span className="hidden sm:inline whitespace-nowrap">
+              {item.title}
+            </span>
           </NavLink>
         ))}
       </div>

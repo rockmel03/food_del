@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "../assets";
 import { InputField } from "../components";
+import { categories } from "../constants";
 import { useForm } from "react-hook-form";
 import Axios from "../utils/axios";
 
@@ -11,7 +12,7 @@ export const AddFood = () => {
 
   const onFormSubmit = async (data) => {
     const formData = new FormData();
-    formData.append('image', image)
+    formData.append("image", image);
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("category", data.category);
@@ -22,10 +23,11 @@ export const AddFood = () => {
 
       if (response.data.status) {
         alert(response.data.message);
+        setImage(null);
         reset();
       }
     } catch (error) {
-      alert(error.message)
+      alert(error.message);
     }
   };
 
@@ -89,9 +91,11 @@ export const AddFood = () => {
               id="category"
               className="w-full bg-transparent text-inherit border-2 px-4 py-2 rounded placeholder:capitalize capitalize"
             >
-              <option value="salad">salad</option>
-              <option value="salad">salad1</option>
-              <option value="salad">salad2</option>
+              {categories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col">
