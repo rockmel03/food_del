@@ -7,16 +7,21 @@ export const FoodList = () => {
   const fetchData = async () => {
     const response = await Axios.get("/api/v1/food/list");
     const { data } = response;
-    return data;
+    setFoodList(data.data);
   };
 
   const deleteHandler = async (itemId) => {
     const response = await Axios.delete(`/api/v1/food/${itemId}`);
-    console.log(response);
+    if (response.status) {
+      alert(response.data.message);
+      fetchData();
+    } else {
+      alert("something went wrong");
+    }
   };
 
   useEffect(() => {
-    fetchData().then((res) => setFoodList(res.data));
+    fetchData();  
   }, []);
 
   return (
