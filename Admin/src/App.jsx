@@ -1,7 +1,6 @@
-import React from "react";
 import { Navbar, Sidebar } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { AddFood, FoodDetails, FoodList, Orders } from "./Pages";
+import { AddFood, FoodDetails, FoodList, Orders, UpdateFood } from "./Pages";
 
 const App = () => {
   return (
@@ -15,6 +14,7 @@ const App = () => {
           <Route path="/list" element={<FoodList />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/details/:id" element={<FoodDetails />} />
+          <Route path="/update/:id" element={<UpdateFood />} />
         </Routes>
       </div>
     </div>
