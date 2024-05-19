@@ -1,5 +1,5 @@
-import { createContext, useEffect, useReducer } from "react";
-import { food_list } from "../assets";
+import { createContext, useEffect, useReducer, useState } from "react";
+import Axios from "../utils/Axios";
 
 export const StoreContext = createContext({});
 
@@ -23,7 +23,19 @@ const cartReducer = (state, action) => {
 };
 
 function StoreContextProvider({ children }) {
+  const [food_list, setFood_list] = useState([]);
   const [cartItems, dispatchCart] = useReducer(cartReducer, {});
+
+  const fetchFoodList = async () => {
+    const response = await Axios.get("/api/v1/food/list");
+    const { data } = response;
+    console.log(response.data.data)
+    return data.data;
+  };
+
+  useEffect(() => {
+    fetchFoodList().then((data) => setFood_list(data));
+  }, []);
 
   const getTotalCartAmount = () => {
     return Object.keys(cartItems)
@@ -42,7 +54,7 @@ function StoreContextProvider({ children }) {
     food_list,
     cartItems,
     dispatchCart,
-    getTotalCartAmount
+    getTotalCartAmount,
   };
 
   return (

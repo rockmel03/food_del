@@ -22,7 +22,9 @@ const DisplayCartItems = () => {
               <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_0.5fr] items-center gap-2 capitalize my-3">
                 <div>
                   <img
-                    src={food.image}
+                    src={`${import.meta.env.VITE_SERVER_URL}/images/${
+                      food.image
+                    }`}
                     alt=""
                     className="w-full h-full object-contain max-w-20"
                   />

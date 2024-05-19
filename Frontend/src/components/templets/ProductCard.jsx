@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets";
 
@@ -19,7 +19,11 @@ const ProductCard = ({ data }) => {
   return (
     <article className="bg-zinc-800 w-full max-w-[350px] aspect-[3/4] rounded-lg overflow-hidden">
       <div className="w-full h-[60%] relative">
-        <img src={data.image} alt="" className="w-full h-full object-cover" />
+        <img
+          src={`${import.meta.env.VITE_SERVER_URL}/images/${data.image}`}
+          alt=""
+          className="w-full h-full object-cover"
+        />
         {quantity == 0 ? (
           <div
             onClick={increment}

@@ -4,12 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../context/StoreContext";
 
 const DisplayFood = () => {
-  const [foodList, setFoodList] = useState([]);
-
   const { food_list } = useContext(StoreContext);
-  const { search } = useLocation();
+  const [foodList, setFoodList] = useState(food_list);
 
-  
+  const { search } = useLocation();
 
   useEffect(() => {
     const searchData = search
@@ -23,7 +21,7 @@ const DisplayFood = () => {
     } else {
       setFoodList(food_list);
     }
-  }, [search]);
+  }, [food_list, search]);
 
   return (
     <section className="py-5">
