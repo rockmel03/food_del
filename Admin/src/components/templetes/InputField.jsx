@@ -7,7 +7,7 @@ export const InputField = React.forwardRef(function InputField(
   const id = useId();
   return (
     <>
-      {label && <label htmlFor={id} className="opacity-80">{label}</label>}
+      {label && <label htmlFor={id} className="opacity-80 w-fit">{label}</label>}
       <input
         type={type || "text"}
         id={id}
