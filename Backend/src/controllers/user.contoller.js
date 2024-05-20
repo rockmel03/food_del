@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const createdUser = await User.findById(user._id).select("-password")
 
-    res
+    return res
         .status(200)
         .cookie("access_token", access_token)
         .json(
@@ -38,6 +38,27 @@ const registerUser = asyncHandler(async (req, res) => {
         );
 });
 
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body
+
+    if (!(email && password)) throw new ApiError(404, 'all field must be required');
+
+    const user = await User.findOne({ email })
+    if (!user) throw new ApiError(404, "User not found")
+
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
+    if (!isPasswordCorrect) throw new ApiError(404, "invalid credentials")
+
+    const access_token = await user.generateAccessToken();
+
+    const loggedInUser = await User.findById(user._id).select("-password")
+
+    return res.status(200)
+        .cookie("access_token", access_token)
+        .json(new ApiResponse(200, { user: loggedInUser, access_token }))
+
+})
 
 
-export { registerUser }
+
+export { registerUser, loginUser }
