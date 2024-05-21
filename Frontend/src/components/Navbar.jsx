@@ -4,8 +4,7 @@ import { StoreContext } from "../context/StoreContext";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ setShowLogin }) => {
-  const isLoggedIn = false;
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const { getTotalCartAmount, accessToken } = useContext(StoreContext);
 
   return (
     <nav className="w-full h-[100px] flex items-center justify-between gap-2 py-2 ">
@@ -53,7 +52,7 @@ const Navbar = ({ setShowLogin }) => {
             </>
           )}
         </Link>
-        {isLoggedIn ? (
+        {accessToken ? (
           <div className="w-[22px] h-[22px]">
             <img
               src={assets.profile_icon}

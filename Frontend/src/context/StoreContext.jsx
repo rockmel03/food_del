@@ -24,17 +24,25 @@ const cartReducer = (state, action) => {
 
 function StoreContextProvider({ children }) {
   const [food_list, setFood_list] = useState([]);
+  const [user, setUser] = useState({});
+  const [accessToken, setAccessToken] = useState("");
+
   const [cartItems, dispatchCart] = useReducer(cartReducer, {});
 
   const fetchFoodList = async () => {
     const response = await Axios.get("/api/v1/food/list");
     const { data } = response;
-    console.log(response.data.data)
     return data.data;
   };
 
   useEffect(() => {
+    // fetch all food
     fetchFoodList().then((data) => setFood_list(data));
+
+    // set the access token
+    if (localStorage.getItem("access_token")) {
+      setAccessToken(localStorage.getItem("access_token"));
+    }
   }, []);
 
   const getTotalCartAmount = () => {
@@ -55,6 +63,10 @@ function StoreContextProvider({ children }) {
     cartItems,
     dispatchCart,
     getTotalCartAmount,
+    user,
+    setUser,
+    accessToken,
+    setAccessToken,
   };
 
   return (

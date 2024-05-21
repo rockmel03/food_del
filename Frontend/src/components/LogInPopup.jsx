@@ -1,16 +1,40 @@
 import { useForm } from "react-hook-form";
 import { assets } from "../assets";
 import InputField from "./templets/InputField";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Axios from "../utils/Axios";
+import { StoreContext } from "../context/StoreContext";
 
 const LogInPopup = ({ setShowLogin }) => {
   const { handleSubmit, register, reset } = useForm();
   const [showSignupForm, setShowSignupForm] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
-  const onFormSubmit = (data) => {
-    console.log(data);
-    reset();
+  const { setUser, setAccessToken } = useContext(StoreContext);
+
+  const onFormSubmit = async (data) => {
+    const url = `/api/v1/user/${showSignupForm ? "register" : "login"}`;
+    try {
+      const response = await Axios.post(url, data);
+
+      if (response?.data?.status) {
+        const { user, access_token } = response.data.data;
+        localStorage.setItem("access_token", access_token);
+
+        setUser(user);
+        setAccessToken(access_token);
+        reset();
+        setShowLogin(false);
+        alert(
+          showSignupForm ? "account created successfully" : "login successful"
+        );
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
+    }
   };
 
   return (
