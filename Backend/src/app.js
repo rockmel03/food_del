@@ -14,12 +14,14 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 //routes imports
 import foodRouter from "./routes/food.route.js";
 import userRouter from "./routes/user.route.js";
+import cartRouter from "./routes/cart.route.js";
 
 
 //routes
 app.use('/api/v1/food', foodRouter)
 app.use('/images', express.static('public/uploads'))
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/cart', cartRouter)
 
 
 export default app
