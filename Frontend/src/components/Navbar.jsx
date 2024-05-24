@@ -2,6 +2,42 @@ import { useContext } from "react";
 import { assets } from "../assets/index";
 import { StoreContext } from "../context/StoreContext";
 import { Link } from "react-router-dom";
+import LogoutButton from "./templets/LogoutButton";
+
+const Profile = () => (
+  <div className="group w-[22px] h-[22px] relative cursor-pointer">
+    <img
+      src={assets.profile_icon}
+      alt="menu_1"
+      className="w-full h-full object-contain"
+    />
+    <div className="hidden group-hover:block absolute z-[9] top-full -right-full p-2 rounded bg-zinc-800">
+      <div className="px-4 py-2 flex items-center gap-2 hover:bg-slate-800">
+        <div className="w-[22px] h-[22px] ">
+          <img
+            src={assets.bag_icon}
+            alt="bag_icon"
+            className="w-full h-full object-contain"
+          />
+        </div>
+        <p>Orders</p>
+      </div>
+      <hr className="boder-[1px] border-zinc-500" />
+      <LogoutButton>
+        <div className="px-4 py-2 flex items-center gap-2 hover:bg-slate-800">
+          <div className=" w-[22px] h-[22px]">
+            <img
+              src={assets.logout_icon}
+              alt="logout_icon"
+              className=" w-full h-full object-contain"
+            />
+          </div>
+          <p>Logout</p>
+        </div>
+      </LogoutButton>
+    </div>
+  </div>
+);
 
 const Navbar = ({ setShowLogin }) => {
   const { getTotalCartAmount, accessToken } = useContext(StoreContext);
@@ -53,13 +89,7 @@ const Navbar = ({ setShowLogin }) => {
           )}
         </Link>
         {accessToken ? (
-          <div className="w-[22px] h-[22px]">
-            <img
-              src={assets.profile_icon}
-              alt="menu_1"
-              className="w-full h-full object-contain"
-            />
-          </div>
+          <Profile />
         ) : (
           <button
             onClick={() => setShowLogin(true)}

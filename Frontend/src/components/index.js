@@ -8,8 +8,8 @@ import DisplayCartItems from "./DisplayCartItems";
 import InputField from "./templets/InputField";
 import LogInPopup from "./LogInPopup";
 import Footer from "./Footer";
+import LogoutButton from "./templets/LogoutButton"
 
 
 
-
-export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField, LogInPopup, Footer };
+export { Navbar, Header, ExploreMenu, ProductCard, DisplayFood, CartTotal, DisplayCartItems, InputField, LogInPopup, Footer, LogoutButton };
