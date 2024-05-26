@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets";
 
 const ProductCard = ({ data }) => {
   const { cartItems, dispatchCart } = useContext(StoreContext);
-  const [quantity, setQuantity] = useState(cartItems[data._id] || 0);
+  const [quantity, setQuantity] = useState(0);
 
   const increment = () => {
     dispatchCart({ type: "add-to-cart", payload: data._id });
@@ -15,6 +15,10 @@ const ProductCard = ({ data }) => {
     dispatchCart({ type: "remove-from-cart", payload: data._id });
     setQuantity((prev) => prev - 1);
   };
+
+  useEffect(() => {
+    setQuantity(cartItems[data._id] || 0);
+  }, [cartItems]);
 
   return (
     <article className="bg-zinc-800 w-full max-w-[350px] aspect-[3/4] rounded-lg overflow-hidden">
