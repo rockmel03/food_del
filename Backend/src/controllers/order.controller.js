@@ -1,0 +1,113 @@
+import mongoose from "mongoose";
+import Stripe from 'stripe'
+import Order from "../models/order.model.js";
+import Food from "../models/food.model.js";
+
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const FRONTEND_DOMAIN = 'http://localhost:3000';
+
+//place order
+const placeOrder = asyncHandler(async (req, res) => {
+    const { items, address } = req.body;
+
+    if (!Object.keys(items).length || !Object.keys(address).length) throw new ApiError(400, "all field must be required")
+
+    const findedFoods = await Food.find(
+        { _id: { $in: Object.keys(items).map(id => new mongoose.Types.ObjectId(id)) } }
+    );
+
+    const foods = findedFoods.map(f => ({
+        ...f._doc,
+        quantity: items[f._id]
+    }))
+
+    const totalPrice = foods.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
+
+    const createdOrder = await Order.create({
+        user: req.user._id,
+        foods,
+        address,
+        total: totalPrice
+    })
+
+    const line_items = foods.map(f => ({
+        price_data: {
+            currency: 'usd',
+            unit_amount: f.price * 100,
+            product_data: {
+                name: f.name,
+                // images: [f.image]
+            },
+        },
+        quantity: f.quantity
+    }))
+    line_items.push({
+        price_data: {
+            currency: 'usd',
+            unit_amount: 2 * 100,
+            product_data: {
+                name: "delivery charges",
+            }
+        },
+        quantity: 1
+    })
+    const session = await stripe.checkout.sessions.create(
+        {
+            line_items,
+            mode: 'payment',
+            success_url: `${FRONTEND_DOMAIN}?success=true&orderid=${createdOrder._id}`,
+            cancel_url: `${FRONTEND_DOMAIN}?success=false&orderid=${createdOrder._id}`,
+        },
+        { apiKey: process.env.STRIPE_SECRET_KEY }
+    );
+
+    return res.status(200).json(new ApiResponse(200, session.url, 'OK'))
+})
+
+// verify order 
+const verifyOrder = asyncHandler(async (req, res) => {
+    const { success, orderid } = req.body;
+
+    const order = await Order.findById(orderid);
+    if (!order) throw new ApiError(400, 'order does not exists')
+
+    if (success) {
+        await Order.updateOne(
+            { _id: order._id },
+            { $set: { payment: true } }
+        )
+        return res.status(200)
+            .json(new ApiResponse(200, order, 'order updated successfully'))
+    } else {
+        await Order.findByIdAndDelete(order._id)
+        return res.status(200)
+            .json(new ApiResponse(200, {}, 'order cancelled'))
+    }
+
+})
+
+// get user's all orders
+const getOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user._id })
+    return res.status(200)
+        .json(new ApiResponse(200, orders, 'orders fetched successfully'))
+});
+
+// get single order
+const getOrder = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    if (!id) throw new ApiError(400, 'id required')
+
+    const order = await Order.findById(id);
+    if (!order) throw new ApiError(400, 'order does not exists')
+
+    return res.status(200)
+        .json(new ApiResponse(200, order, 'order fetched successfully'))
+});
+
+
+export { placeOrder, getOrders, getOrder }
