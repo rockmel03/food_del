@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { verifyAuth } from '../middlewares/auth.middleware.js';
-import { placeOrder, getOrders, getOrder } from '../controllers/order.controller.js';
+import { placeOrder, getOrders, getOrder, verifyOrder } from '../controllers/order.controller.js';
 
 
 const orderRouter = Router();
@@ -18,6 +18,11 @@ orderRouter
 orderRouter
     .route('/:id')
     .get(getOrder)
+
+orderRouter
+    .route('/:id/verify')
+    .post(verifyOrder)
+
 
 
 

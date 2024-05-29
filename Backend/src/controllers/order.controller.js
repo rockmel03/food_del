@@ -7,6 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { FRONTEND_DOMAIN } from "../constants.js";
+import User from "../models/user.model.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -14,7 +15,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrder = asyncHandler(async (req, res) => {
     const { items, address } = req.body;
 
-    if (!Object.keys(items).length || !Object.keys(address).length) throw new ApiError(400, "all field must be required")
+    if ((!items || !address) || (!Object.keys(items).length || !Object.keys(address).length)) {
+        throw new ApiError(400, "all field must be required")
+    }
 
     const findedFoods = await Food.find(
         { _id: { $in: Object.keys(items).map(id => new mongoose.Types.ObjectId(id)) } }
@@ -36,8 +39,8 @@ const placeOrder = asyncHandler(async (req, res) => {
 
     const line_items = foods.map(f => ({
         price_data: {
-            currency: 'usd',
-            unit_amount: f.price * 100,
+            currency: 'inr',
+            unit_amount: f.price * 100 * 80,
             product_data: {
                 name: f.name,
                 // images: [f.image]
@@ -47,8 +50,8 @@ const placeOrder = asyncHandler(async (req, res) => {
     }))
     line_items.push({
         price_data: {
-            currency: 'usd',
-            unit_amount: 2 * 100,
+            currency: 'inr',
+            unit_amount: 2 * 100 * 80,
             product_data: {
                 name: "delivery charges",
             }
@@ -70,22 +73,27 @@ const placeOrder = asyncHandler(async (req, res) => {
 
 // verify order 
 const verifyOrder = asyncHandler(async (req, res) => {
-    const { success, orderid } = req.body;
+
+    const { id: orderid } = req.params
+    const { success } = req.body;
+
+    if (!orderid) throw new ApiError(400, 'orderid is required')
 
     const order = await Order.findById(orderid);
     if (!order) throw new ApiError(400, 'order does not exists')
 
-    if (success) {
+    if (success == 'true') {
         await Order.updateOne(
             { _id: order._id },
             { $set: { payment: true } }
         )
-        return res.status(200)
-            .json(new ApiResponse(200, order, 'order updated successfully'))
+        await User.findByIdAndUpdate(req.user._id, { cart: {} })
+        return res.status(202)
+            .json(new ApiResponse(202, { paymentStatus: true }, 'Payment made successfully'))
     } else {
         await Order.findByIdAndDelete(order._id)
-        return res.status(200)
-            .json(new ApiResponse(200, {}, 'order cancelled'))
+        return res.status(409)
+            .json(new ApiResponse(409, { paymentStatus: false }, 'Payment has been canceled by the client.'))
     }
 
 })
@@ -110,4 +118,4 @@ const getOrder = asyncHandler(async (req, res) => {
 });
 
 
-export { placeOrder, getOrders, getOrder }
+export { placeOrder, getOrders, getOrder, verifyOrder }
