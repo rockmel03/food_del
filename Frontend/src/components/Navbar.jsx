@@ -12,16 +12,18 @@ const Profile = () => (
       className="w-full h-full object-contain"
     />
     <div className="hidden group-hover:block absolute z-[9] top-full -right-full p-2 rounded bg-zinc-800">
-      <div className="px-4 py-2 flex items-center gap-2 hover:bg-slate-800">
-        <div className="w-[22px] h-[22px] ">
-          <img
-            src={assets.bag_icon}
-            alt="bag_icon"
-            className="w-full h-full object-contain"
-          />
+      <Link to="/myorders">
+        <div className="px-4 py-2 flex items-center gap-2 hover:bg-slate-800">
+          <div className="w-[22px] h-[22px] ">
+            <img
+              src={assets.bag_icon}
+              alt="bag_icon"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <p>Orders</p>
         </div>
-        <p>Orders</p>
-      </div>
+      </Link>
       <hr className="boder-[1px] border-zinc-500" />
       <LogoutButton>
         <div className="px-4 py-2 flex items-center gap-2 hover:bg-slate-800">
