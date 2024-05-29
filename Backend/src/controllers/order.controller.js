@@ -100,7 +100,46 @@ const verifyOrder = asyncHandler(async (req, res) => {
 
 // get user's all orders
 const getOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.user._id })
+    const orders = await Order.aggregate([
+        {
+            $unwind: {
+                path: "$foods",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: "foods",
+                localField: "foods._id",
+                foreignField: "_id",
+                as: "foodDetail"
+            }
+        },
+        {
+            $unwind: {
+                path: "$foodDetail",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "address": { "$first": "$address" },
+                "total": { "$first": "$total" },
+                "status": { "$first": "$status" },
+                "payment": { "$first": "$payment" },
+                "createdAt": { "$first": "$createdAt" },
+                "updatedAt": { "$first": "$updatedAt" },
+                "foods": {
+                    $push: {
+                        "foodDetail": "$foodDetail",
+                        "quantity": "$foods.quantity"
+                    }
+                }
+            }
+        }
+    ])
+    
     return res.status(200)
         .json(new ApiResponse(200, orders, 'orders fetched successfully'))
 });
@@ -110,7 +149,51 @@ const getOrder = asyncHandler(async (req, res) => {
     const { id } = req.params
     if (!id) throw new ApiError(400, 'id required')
 
-    const order = await Order.findById(id);
+    const order = await Order.aggregate([
+        {
+            $match:
+            {
+                _id: new mongoose.Types.ObjectId(id)
+            }
+        },
+        {
+            $unwind: {
+                path: "$foods",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: "foods",
+                localField: "foods._id",
+                foreignField: "_id",
+                as: "foodDetail"
+            }
+        },
+        {
+            $unwind: {
+                path: "$foodDetail",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "address": { "$first": "$address" },
+                "total": { "$first": "$total" },
+                "status": { "$first": "$status" },
+                "payment": { "$first": "$payment" },
+                "createdAt": { "$first": "$createdAt" },
+                "updatedAt": { "$first": "$updatedAt" },
+                "foods": {
+                    $push: {
+                        "foodDetail": "$foodDetail",
+                        "quantity": "$foods.quantity"
+                    }
+                }
+            }
+        }
+    ])
     if (!order) throw new ApiError(400, 'order does not exists')
 
     return res.status(200)
