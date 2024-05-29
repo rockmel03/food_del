@@ -6,9 +6,9 @@ import Food from "../models/food.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
+import { FRONTEND_DOMAIN } from "../constants.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const FRONTEND_DOMAIN = 'http://localhost:3000';
 
 //place order
 const placeOrder = asyncHandler(async (req, res) => {
@@ -59,13 +59,13 @@ const placeOrder = asyncHandler(async (req, res) => {
         {
             line_items,
             mode: 'payment',
-            success_url: `${FRONTEND_DOMAIN}?success=true&orderid=${createdOrder._id}`,
-            cancel_url: `${FRONTEND_DOMAIN}?success=false&orderid=${createdOrder._id}`,
+            success_url: `${FRONTEND_DOMAIN}/verify?success=true&orderid=${createdOrder._id}`,
+            cancel_url: `${FRONTEND_DOMAIN}/verify?success=false&orderid=${createdOrder._id}`,
         },
         { apiKey: process.env.STRIPE_SECRET_KEY }
     );
 
-    return res.status(200).json(new ApiResponse(200, session.url, 'OK'))
+    return res.status(200).json(new ApiResponse(200, { url: session.url }, 'OK'))
 })
 
 // verify order 
