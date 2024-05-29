@@ -2,16 +2,38 @@ import { useContext } from "react";
 import { InputField } from "../components";
 import { useForm } from "react-hook-form";
 import { StoreContext } from "../context/StoreContext";
+import Axios from "../utils/Axios";
 
 const Order = () => {
   const { handleSubmit, register } = useForm();
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const { getTotalCartAmount, cartItems } = useContext(StoreContext);
 
   let deliveryFee = 2;
   let subtotal = getTotalCartAmount();
 
-  const handleFormSubmit = (data) => {
-    console.log(data);
+  const placeOrder = async (dataToSend) => {
+    try {
+      const response = await Axios.post("/api/v1/order/place", dataToSend);
+      if (response?.data?.status) {
+        window.location.replace(response.data?.data?.url);
+      } else {
+        alert(response.data?.message);
+      }
+    } catch (error) {
+      alert(error.response.statusText);
+    }
+  };
+
+  const handleFormSubmit = (address) => {
+    if (Object.keys(cartItems).length > 0) {
+      // send request to server
+      placeOrder({
+        address,
+        items: cartItems,
+      });
+    } else {
+      alert("no items added to place order");
+    }
   };
 
   return (
@@ -66,7 +88,7 @@ const Order = () => {
           </div>
           <div className="flex gap-2">
             <InputField
-              {...register("pinCode", { required: true })}
+              {...register("zipcode", { required: true })}
               type="number"
               placeholder="zip code"
               className="shadow-md bg-zinc-700 placeholder:capitalize"

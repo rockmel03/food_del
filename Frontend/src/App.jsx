@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Footer, LogInPopup, Navbar } from "./components/index";
-import { Cart, Home, Order } from "./pages";
+import { Cart, Home, Order, Verify } from "./pages";
 import { useState } from "react";
 
 const App = () => {
@@ -15,6 +15,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/verify" element={<Verify />} />
       </Routes>
       <Footer />
     </main>
